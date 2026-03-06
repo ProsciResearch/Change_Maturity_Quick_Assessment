@@ -5,14 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Prosci Change Management Maturity Model Quick Assessment</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700;900&display=swap');
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
-    background: #FFFFFF;
-    color: #2D2A4A;
+    font-family: Arial, sans-serif;
+    background: #FFFEFA;
+    color: #350944;
     height: 100vh;
     overflow: hidden;
     user-select: none;
@@ -20,33 +18,42 @@
 
   /* ===== HEADER ===== */
   .header {
-    background: #2D2A4A;
+    background: #350944;
     padding: 14px 36px;
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
-  .header h1 { color: #FFFFFF; font-size: 22px; font-weight: 700; }
+  .header h1 {
+    color: #FFFEFA;
+    font-family: Garamond, 'Times New Roman', serif;
+    font-size: 22px;
+    font-weight: normal;
+    font-style: italic;
+    letter-spacing: 0.01em;
+  }
   .header-actions { display: flex; gap: 10px; }
   .header-btn {
-    background: rgba(255,255,255,0.12);
-    color: #FFFFFF;
-    border: 1px solid rgba(255,255,255,0.25);
-    padding: 6px 16px;
-    border-radius: 4px;
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 600;
+    background: #D2F7A9;
+    color: #350944;
+    border: none;
+    padding: 6px 18px;
+    border-radius: 2px;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
     cursor: pointer;
     transition: background 0.15s;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
   }
-  .header-btn:hover { background: rgba(255,255,255,0.22); }
+  .header-btn:hover { background: #b8e88a; }
 
   /* ===== PAGE LAYOUT ===== */
   .page {
     display: grid;
     grid-template-columns: 1fr 340px;
-    height: calc(100vh - 50px - 28px);
+    height: calc(100vh - 50px - 6px);
   }
 
   /* ===== LEFT COLUMN ===== */
@@ -54,16 +61,24 @@
     display: flex;
     flex-direction: column;
     padding: 24px 36px 20px 36px;
+    background: #FFFEFA;
   }
-  .intro-title { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+  .intro-title {
+    font-family: Garamond, 'Times New Roman', serif;
+    font-size: 20px;
+    font-weight: normal;
+    color: #350944;
+    margin-bottom: 6px;
+    letter-spacing: 0.01em;
+  }
   .intro-text {
-    font-size: 14px;
-    color: #555;
-    line-height: 1.5;
-    margin-bottom: 10px;
+    font-size: 13px;
+    color: #444;
+    line-height: 1.55;
+    margin-bottom: 12px;
     max-width: 700px;
   }
-  .intro-text a { color: #2D2A4A; font-weight: 600; text-decoration: none; }
+  .intro-text a { color: #350944; font-weight: bold; text-decoration: none; }
   .intro-text a:hover { text-decoration: underline; }
 
   .sliders-area {
@@ -79,10 +94,13 @@
     align-items: center;
   }
   .slider-dim-title {
-    font-size: 15px;
-    font-weight: 700;
+    font-family: Garamond, 'Times New Roman', serif;
+    font-size: 16px;
+    font-weight: normal;
+    color: #350944;
     text-align: center;
     margin-bottom: 4px;
+    letter-spacing: 0.01em;
   }
   .slider-row {
     display: grid;
@@ -92,8 +110,8 @@
     width: 100%;
   }
   .desc-left, .desc-right {
-    font-size: 13px;
-    color: #555;
+    font-size: 12px;
+    color: #666;
     line-height: 1.35;
     text-align: center;
   }
@@ -111,8 +129,8 @@
   .cs-track {
     position: absolute;
     left: 0; right: 0;
-    height: 4px;
-    background: #D4D4DC;
+    height: 3px;
+    background: #e0dbd5;
     border-radius: 2px;
     top: 50%;
     transform: translateY(-50%);
@@ -120,8 +138,8 @@
   .cs-fill {
     position: absolute;
     left: 0;
-    height: 4px;
-    background: #2D2A4A;
+    height: 3px;
+    background: #350944;
     border-radius: 2px;
     top: 50%;
     transform: translateY(-50%);
@@ -137,19 +155,19 @@
     pointer-events: none;
   }
   .cs-tick {
-    width: 8px; height: 8px;
+    width: 7px; height: 7px;
     border-radius: 50%;
-    background: #D4D4DC;
+    background: #e0dbd5;
     transition: background 0.15s;
   }
-  .cs-tick.filled { background: #2D2A4A; }
+  .cs-tick.filled { background: #350944; }
 
   .cs-thumb {
     position: absolute;
     width: 36px; height: 36px;
     border-radius: 50%;
-    background: #2D2A4A;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    background: #350944;
+    box-shadow: 0 2px 8px rgba(53,9,68,0.25);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -158,30 +176,50 @@
     cursor: grab;
     z-index: 2;
   }
-  .cs-thumb:hover { transform: translateX(-50%) scale(1.08); }
+  .cs-thumb:hover { transform: translateX(-50%) scale(1.08); background: #4a1260; }
   .cs-thumb:active { cursor: grabbing; transform: translateX(-50%) scale(1.12); }
   .cs-thumb .cs-val {
-    color: #FFFFFF;
-    font-size: 13px;
-    font-weight: 800;
+    color: #D2F7A9;
+    font-size: 12px;
+    font-weight: bold;
     pointer-events: none;
+    font-family: Arial, sans-serif;
   }
 
   /* ===== RIGHT COLUMN ===== */
   .right-col {
     display: flex;
     flex-direction: column;
-    background: #F5F5F8;
-    border-left: 1px solid #E4E4EA;
+    background: #F6F4ED;
+    border-left: 1px solid #e0dbd5;
     padding: 24px 28px 20px;
     overflow-y: auto;
   }
-  .maturity-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
-  .maturity-desc { font-size: 14px; color: #555; line-height: 1.5; margin-bottom: 6px; }
+  .maturity-title {
+    font-family: Garamond, 'Times New Roman', serif;
+    font-size: 20px;
+    font-weight: normal;
+    color: #350944;
+    margin-bottom: 6px;
+    letter-spacing: 0.01em;
+  }
+  .maturity-desc { font-size: 12px; color: #666; line-height: 1.5; margin-bottom: 10px; }
 
-  .score-display { text-align: center; margin-bottom: 8px; }
-  .score-number { font-size: 44px; font-weight: 900; color: #2D2A4A; line-height: 1; }
-  .score-label { font-size: 12px; color: #888; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+  .score-display { text-align: center; margin-bottom: 10px; }
+  .score-number {
+    font-family: Garamond, 'Times New Roman', serif;
+    font-size: 52px;
+    font-weight: normal;
+    color: #350944;
+    line-height: 1;
+  }
+  .score-label {
+    font-size: 11px;
+    color: #999;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
 
   .levels-area {
     display: flex;
@@ -190,23 +228,36 @@
   }
 
   .level-item {
-    text-align: center;
+    text-align: left;
     padding: 8px 14px;
-    border-radius: 4px;
+    border-radius: 2px;
     transition: all 0.25s;
     border-left: 4px solid transparent;
   }
   .level-item .level-text { line-height: 1.3; }
-  .level-item .level-num { font-size: 16px; font-weight: 900; display: block; color: #AAAAB4; }
-  .level-item .level-name { font-size: 14px; font-weight: 400; display: block; color: #AAAAB4; }
+  .level-item .level-num {
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    display: block;
+    color: #ccc;
+  }
+  .level-item .level-name {
+    font-family: Garamond, 'Times New Roman', serif;
+    font-size: 15px;
+    font-weight: normal;
+    display: block;
+    color: #ccc;
+  }
 
   .level-item.active {
-    background: #FFFFFF;
-    border-left: 4px solid #2D2A4A;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    background: #FFFEFA;
+    border-left: 4px solid #D2F7A9;
+    box-shadow: 0 1px 4px rgba(53,9,68,0.08);
   }
-  .level-item.active .level-num { color: #2D2A4A; }
-  .level-item.active .level-name { color: #2D2A4A; font-weight: 600; }
+  .level-item.active .level-num { color: #350944; }
+  .level-item.active .level-name { color: #350944; }
 
   /* Expandable description panel */
   .level-detail {
@@ -217,12 +268,14 @@
   }
   .level-detail.open {
     max-height: 300px;
-    padding: 8px 12px 4px;
+    padding: 8px 14px 4px;
   }
   .level-detail p {
-    font-size: 12px;
-    line-height: 1.5;
+    font-size: 11px;
+    line-height: 1.55;
     color: #555;
+    border-top: 1px solid #e0dbd5;
+    padding-top: 6px;
   }
 
   /* ===== PRINT SLIDER (hidden on screen) ===== */
@@ -230,8 +283,8 @@
 
   /* ===== SCREEN FOOTER BAR ===== */
   .screen-footer {
-    height: 28px;
-    background: #2D2A4A;
+    height: 6px;
+    background: #D2F7A9;
   }
 
   /* ===== PRINT FOOTER (hidden on screen) ===== */
@@ -245,7 +298,7 @@
     body { height: auto; overflow: auto; }
     .page { grid-template-columns: 1fr; height: auto; }
     .left-col { padding: 20px; }
-    .right-col { border-left: none; border-top: 1px solid #E4E4EA; padding: 20px; }
+    .right-col { border-left: none; border-top: 1px solid #e0dbd5; padding: 20px; }
     .slider-row { grid-template-columns: 1fr; gap: 4px; }
     .desc-left, .desc-right { text-align: left; }
     .header { flex-direction: column; gap: 8px; text-align: center; padding: 14px 20px; }
@@ -255,7 +308,7 @@
 
   /* ===== PRINT ===== */
   @media print {
-    body { height: auto; overflow: visible; }
+    body { height: auto; overflow: visible; background: #FFFEFA; }
     .header-actions { display: none; }
     .page {
       display: grid;
@@ -266,8 +319,8 @@
     }
     .left-col { padding: 10px 14px; }
     .right-col {
-      background: #F5F5F8;
-      border-left: 1px solid #E4E4EA;
+      background: #F6F4ED;
+      border-left: 1px solid #e0dbd5;
       padding: 10px 12px;
       overflow: visible;
     }
@@ -299,7 +352,7 @@
       position: absolute;
       top: 50%; left: 8px;
       height: 2px;
-      background: #2D2A4A;
+      background: #350944;
       transform: translateY(-50%);
     }
     .print-slider .ps-dot {
@@ -307,13 +360,13 @@
       top: 50%;
       width: 14px; height: 14px;
       border-radius: 50%;
-      background: #2D2A4A;
+      background: #350944;
       margin-top: -7px;
       text-align: center;
       line-height: 14px;
-      color: #fff;
+      color: #D2F7A9;
       font-size: 7px;
-      font-weight: 800;
+      font-weight: bold;
     }
 
     .maturity-title { font-size: 12px; margin-bottom: 2px; }
@@ -322,8 +375,8 @@
     .score-number { font-size: 24px; }
     .score-label { font-size: 7px; }
     .level-item { padding: 3px 6px; }
-    .level-item .level-num { font-size: 10px; }
-    .level-item .level-name { font-size: 8.5px; }
+    .level-item .level-num { font-size: 8px; }
+    .level-item .level-name { font-size: 9px; }
     .levels-area { gap: 2px; }
     .header { padding: 6px 14px; }
     .header h1 { font-size: 13px; }
@@ -335,10 +388,16 @@
     .level-summary {
       display: block;
       padding: 12px 14px;
-      border-top: 2px solid #2D2A4A;
+      border-top: 3px solid #350944;
       page-break-inside: avoid;
     }
-    .level-summary h3 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .level-summary h3 {
+      font-family: Garamond, 'Times New Roman', serif;
+      font-size: 14px;
+      font-weight: normal;
+      margin-bottom: 4px;
+      color: #350944;
+    }
     .level-summary p { font-size: 12px; line-height: 1.5; color: #333; }
 
     /* Hide screen footer, show print footer */
@@ -349,7 +408,7 @@
       align-items: center;
       padding: 8px 14px;
       border-top: 1px solid #ccc;
-      font-size: 12px;
+      font-size: 11px;
       color: #666;
       position: fixed;
       bottom: 0;
@@ -369,7 +428,7 @@
 <body>
 
 <div class="header">
-  <h1>Prosci Change Management Maturity Model Quick Assessment</h1>
+  <h1>Prosci Change Management Maturity Model — Quick Assessment</h1>
   <div class="header-actions">
     <button class="header-btn" onclick="resetAll()">Reset</button>
     <button class="header-btn" onclick="window.print()">Print / PDF</button>
