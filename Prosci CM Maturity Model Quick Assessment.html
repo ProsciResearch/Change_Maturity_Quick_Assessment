@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prosci Change Management Maturity Model Quick Assessment</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
+    background: #FFFFFF;
+    color: #2D2A4A;
+    height: 100vh;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    background: #2D2A4A;
+    padding: 14px 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header h1 { color: #FFFFFF; font-size: 22px; font-weight: 700; }
+  .header-actions { display: flex; gap: 10px; }
+  .header-btn {
+    background: rgba(255,255,255,0.12);
+    color: #FFFFFF;
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 6px 16px;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .header-btn:hover { background: rgba(255,255,255,0.22); }
+
+  /* ===== PAGE LAYOUT ===== */
+  .page {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    height: calc(100vh - 50px - 28px);
+  }
+
+  /* ===== LEFT COLUMN ===== */
+  .left-col {
+    display: flex;
+    flex-direction: column;
+    padding: 24px 36px 20px 36px;
+  }
+  .intro-title { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+  .intro-text {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    max-width: 700px;
+  }
+  .intro-text a { color: #2D2A4A; font-weight: 600; text-decoration: none; }
+  .intro-text a:hover { text-decoration: underline; }
+
+  .sliders-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .slider-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .slider-dim-title {
+    font-size: 15px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 4px;
+  }
+  .slider-row {
+    display: grid;
+    grid-template-columns: 170px 1fr 170px;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+  }
+  .desc-left, .desc-right {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.35;
+    text-align: center;
+  }
+
+  /* ===== CUSTOM SLIDER ===== */
+  .custom-slider {
+    position: relative;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    touch-action: none;
+    overflow: visible;
+  }
+  .cs-track {
+    position: absolute;
+    left: 0; right: 0;
+    height: 4px;
+    background: #D4D4DC;
+    border-radius: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .cs-fill {
+    position: absolute;
+    left: 0;
+    height: 4px;
+    background: #2D2A4A;
+    border-radius: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: width 0.05s;
+  }
+  .cs-ticks {
+    position: absolute;
+    left: 0; right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+  }
+  .cs-tick {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #D4D4DC;
+    transition: background 0.15s;
+  }
+  .cs-tick.filled { background: #2D2A4A; }
+
+  .cs-thumb {
+    position: absolute;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: #2D2A4A;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateX(-50%);
+    transition: left 0.05s, transform 0.1s;
+    cursor: grab;
+    z-index: 2;
+  }
+  .cs-thumb:hover { transform: translateX(-50%) scale(1.08); }
+  .cs-thumb:active { cursor: grabbing; transform: translateX(-50%) scale(1.12); }
+  .cs-thumb .cs-val {
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 800;
+    pointer-events: none;
+  }
+
+  /* ===== RIGHT COLUMN ===== */
+  .right-col {
+    display: flex;
+    flex-direction: column;
+    background: #F5F5F8;
+    border-left: 1px solid #E4E4EA;
+    padding: 24px 28px 20px;
+    overflow-y: auto;
+  }
+  .maturity-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+  .maturity-desc { font-size: 14px; color: #555; line-height: 1.5; margin-bottom: 6px; }
+
+  .score-display { text-align: center; margin-bottom: 8px; }
+  .score-number { font-size: 44px; font-weight: 900; color: #2D2A4A; line-height: 1; }
+  .score-label { font-size: 12px; color: #888; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+
+  .levels-area {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .level-item {
+    text-align: center;
+    padding: 8px 14px;
+    border-radius: 4px;
+    transition: all 0.25s;
+    border-left: 4px solid transparent;
+  }
+  .level-item .level-text { line-height: 1.3; }
+  .level-item .level-num { font-size: 16px; font-weight: 900; display: block; color: #AAAAB4; }
+  .level-item .level-name { font-size: 14px; font-weight: 400; display: block; color: #AAAAB4; }
+
+  .level-item.active {
+    background: #FFFFFF;
+    border-left: 4px solid #2D2A4A;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .level-item.active .level-num { color: #2D2A4A; }
+  .level-item.active .level-name { color: #2D2A4A; font-weight: 600; }
+
+  /* Expandable description panel */
+  .level-detail {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.35s ease;
+    padding: 0 12px;
+  }
+  .level-detail.open {
+    max-height: 300px;
+    padding: 8px 12px 4px;
+  }
+  .level-detail p {
+    font-size: 12px;
+    line-height: 1.5;
+    color: #555;
+  }
+
+  /* ===== PRINT SLIDER (hidden on screen) ===== */
+  .print-slider { display: none; }
+
+  /* ===== SCREEN FOOTER BAR ===== */
+  .screen-footer {
+    height: 28px;
+    background: #2D2A4A;
+  }
+
+  /* ===== PRINT FOOTER (hidden on screen) ===== */
+  .print-footer { display: none; }
+
+  /* ===== PRINT SUMMARY (below main grid) ===== */
+  .level-summary { display: none; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    body { height: auto; overflow: auto; }
+    .page { grid-template-columns: 1fr; height: auto; }
+    .left-col { padding: 20px; }
+    .right-col { border-left: none; border-top: 1px solid #E4E4EA; padding: 20px; }
+    .slider-row { grid-template-columns: 1fr; gap: 4px; }
+    .desc-left, .desc-right { text-align: left; }
+    .header { flex-direction: column; gap: 8px; text-align: center; padding: 14px 20px; }
+    .header h1 { font-size: 17px; }
+    .levels-area { gap: 6px; }
+  }
+
+  /* ===== PRINT ===== */
+  @media print {
+    body { height: auto; overflow: visible; }
+    .header-actions { display: none; }
+    .page {
+      display: grid;
+      grid-template-columns: 1fr 220px;
+      height: auto;
+      padding: 0;
+      gap: 0;
+    }
+    .left-col { padding: 10px 14px; }
+    .right-col {
+      background: #F5F5F8;
+      border-left: 1px solid #E4E4EA;
+      padding: 10px 12px;
+      overflow: visible;
+    }
+    .slider-row {
+      display: grid;
+      grid-template-columns: 90px 1fr 90px;
+      gap: 12px;
+    }
+    .intro-text { margin-bottom: 4px; font-size: 9px; }
+    .intro-title { font-size: 13px; }
+    .slider-dim-title { font-size: 10px; margin-bottom: 1px; }
+    .desc-left, .desc-right { font-size: 8px; text-align: center; line-height: 1.3; }
+
+    /* Hide interactive slider in print, show static version */
+    .custom-slider { display: none; }
+    .print-slider {
+      display: block;
+      position: relative;
+      height: 14px;
+    }
+    .print-slider .ps-track {
+      position: absolute;
+      top: 50%; left: 8px; right: 8px;
+      height: 2px;
+      background: #ccc;
+      transform: translateY(-50%);
+    }
+    .print-slider .ps-fill {
+      position: absolute;
+      top: 50%; left: 8px;
+      height: 2px;
+      background: #2D2A4A;
+      transform: translateY(-50%);
+    }
+    .print-slider .ps-dot {
+      position: absolute;
+      top: 50%;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: #2D2A4A;
+      margin-top: -7px;
+      text-align: center;
+      line-height: 14px;
+      color: #fff;
+      font-size: 7px;
+      font-weight: 800;
+    }
+
+    .maturity-title { font-size: 12px; margin-bottom: 2px; }
+    .maturity-desc { font-size: 9px; margin-bottom: 2px; }
+    .score-display { margin-bottom: 3px; }
+    .score-number { font-size: 24px; }
+    .score-label { font-size: 7px; }
+    .level-item { padding: 3px 6px; }
+    .level-item .level-num { font-size: 10px; }
+    .level-item .level-name { font-size: 8.5px; }
+    .levels-area { gap: 2px; }
+    .header { padding: 6px 14px; }
+    .header h1 { font-size: 13px; }
+
+    /* Hide on-screen expandable detail */
+    .level-detail { display: none; }
+
+    /* Show print summary */
+    .level-summary {
+      display: block;
+      padding: 12px 14px;
+      border-top: 2px solid #2D2A4A;
+      page-break-inside: avoid;
+    }
+    .level-summary h3 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .level-summary p { font-size: 12px; line-height: 1.5; color: #333; }
+
+    /* Hide screen footer, show print footer */
+    .screen-footer { display: none; }
+    .print-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 14px;
+      border-top: 1px solid #ccc;
+      font-size: 12px;
+      color: #666;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+
+    .cs-thumb, .cs-fill, .cs-tick.filled,
+    .level-item.active, .header, .right-col, .level-summary,
+    .ps-dot, .ps-fill, .ps-track {
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Prosci Change Management Maturity Model Quick Assessment</h1>
+  <div class="header-actions">
+    <button class="header-btn" onclick="resetAll()">Reset</button>
+    <button class="header-btn" onclick="window.print()">Print / PDF</button>
+  </div>
+</div>
+
+<div class="page">
+
+  <div class="left-col">
+    <div class="intro-title">The Quick Assessment</div>
+    <div class="intro-text">The purpose of this tool is to promote early conversations about organizational change management maturity. Move each slider below to evaluate your organization's change management maturity across the following five capability areas. Use the discussion to determine your next steps. For any additional questions, please reach out to <a id="email-link">solutions&#64;prosci.com</a>.</div>
+
+    <div class="sliders-area" id="sliders-area">
+
+      <div class="slider-block">
+        <div class="slider-dim-title">Leadership</div>
+        <div class="slider-row">
+          <div class="desc-left">Vision, sponsorship, and resources for enterprise change management are not evident.</div>
+          <div class="custom-slider" data-dim="leadership">
+            <div class="cs-track"></div>
+            <div class="cs-fill"></div>
+            <div class="cs-ticks"><span class="cs-tick filled"></span><span class="cs-tick"></span><span class="cs-tick"></span><span class="cs-tick"></span><span class="cs-tick"></span></div>
+            <div class="cs-thumb"><span class="cs-val">1.0</span></div>
+          </div>
+          <div class="print-slider" data-dim="leadership"><div class="ps-track"></div><div class="ps-fill"></div><div class="ps-dot"></div></div>
+          <div class="desc-right">Vision, sponsorship, and resources for enterprise change management are fully evident.</div>
+        </div>
+      </div>
+
+      <div class="slider-block">
+        <div class="slider-dim-title">Application</div>
+        <div class="slider-row">
+          <div class="desc-left">The application of change management processes and tools across the organization is not evident.</div>
+          <div class="custom-slider" data-dim="application">
+            <div class="cs-track"></div>
+            <div class="cs-fill"></div>
+            <div class="cs-ticks"><span class="cs-tick filled"></span><span class="cs-tick"></span><span class="cs-tick"></span><span class="cs-tick"></span><span class="cs-tick"></span></div>
+            <div class="cs-thumb"><span class="cs-val">1.0</span></div>
+          </div>
+          <div class="print-slider" data-dim="application"><div class="ps-track"></div><div class="ps-fill"></div><div class="ps-dot"></div></div>
+          <div class="desc-right">The application of change management processes and tools across the organization is fully evident.</div>
+        </div>
+      </div>
+
+      <div class="slider-block">
+        <div class="slider-dim-title">Competencies</div>
+        <div class="slider-row">
+          <div class="desc-left">The change management competencies across the organization are not evident.</div>
+          <div class="custom-slider" data-dim="competencies">
+            <div class="cs-track"></div>
+            <div class="cs-fill"></div>
+            <div class="cs-ticks"><span class="cs-tick filled"></span><span class="cs-tick"></span><span class="cs-tick"></span><span class="cs-tick"></span><span class="cs-tick"></span></div>
+            <div class="cs-thumb"><span class="cs-val">1.0</span></div>
+          </div>
+          <div class="print-slider" data-dim="competencies"><div class="ps-track"></div><div class="ps-fill"></div><div class="ps-dot"></div></div>
+          <div class="desc-right">The change management competencies across the organization are fully evident.</div>
+        </div>
+      </div>
+
+      <div class="slider-block">
+        <div class="slider-dim-title">Standardization</div>
+        <div class="slider-row">
+          <div class="desc-left">The standardization of change management processes, policies, tools, roles, et cetera, is not evident.</div>
+          <div class="custom-slider" data-dim="standardization">
+            <div class="cs-track"></div>
+            <div class="cs-fill"></div>
+            <div class="cs-ticks"><span class="cs-tick filled"></span><span class="cs-tick"></span><span class="cs-tick"></span><span class="cs-tick"></span><span class="cs-tick"></span></div>
+            <div class="cs-thumb"><span class="cs-val">1.0</span></div>
+          </div>
+          <div class="print-slider" data-dim="standardization"><div class="ps-track"></div><div class="ps-fill"></div><div class="ps-dot"></div></div>
+          <div class="desc-right">The standardization of change management processes, policies, tools, roles, et cetera, is fully evident.</div>
+        </div>
+      </div>
+
+      <div class="slider-block">
+        <div class="slider-dim-title">Socialization</div>
+        <div class="slider-row">
+          <div class="desc-left">The socialization of change management across the organization is not evident.</div>
+          <div class="custom-slider" data-dim="socialization">
+            <div class="cs-track"></div>
+            <div class="cs-fill"></div>
+            <div class="cs-ticks"><span class="cs-tick filled"></span><span class="cs-tick"></span><span class="cs-tick"></span><span class="cs-tick"></span><span class="cs-tick"></span></div>
+            <div class="cs-thumb"><span class="cs-val">1.0</span></div>
+          </div>
+          <div class="print-slider" data-dim="socialization"><div class="ps-track"></div><div class="ps-fill"></div><div class="ps-dot"></div></div>
+          <div class="desc-right">The socialization of change management across the organization is fully evident.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="right-col">
+    <div class="maturity-title">Maturity Level Estimate</div>
+    <div class="maturity-desc">Based on your average score, your estimated change management maturity level is:</div>
+
+    <div class="score-display">
+      <div class="score-number" id="avg-score">1.0</div>
+      <div class="score-label">Average Score</div>
+    </div>
+
+    <div class="levels-area">
+      <div>
+        <div class="level-item" id="lv-5"><div class="level-text"><span class="level-num">Level 5</span><span class="level-name">Organizational Competency</span></div></div>
+        <div class="level-detail" id="detail-5"><p></p></div>
+      </div>
+      <div>
+        <div class="level-item" id="lv-4"><div class="level-text"><span class="level-num">Level 4</span><span class="level-name">Organizational Change Management Standards</span></div></div>
+        <div class="level-detail" id="detail-4"><p></p></div>
+      </div>
+      <div>
+        <div class="level-item" id="lv-3"><div class="level-text"><span class="level-num">Level 3</span><span class="level-name">Change Management on Multiple Projects</span></div></div>
+        <div class="level-detail" id="detail-3"><p></p></div>
+      </div>
+      <div>
+        <div class="level-item" id="lv-2"><div class="level-text"><span class="level-num">Level 2</span><span class="level-name">Change Management on Isolated Projects</span></div></div>
+        <div class="level-detail" id="detail-2"><p></p></div>
+      </div>
+      <div>
+        <div class="level-item active" id="lv-1"><div class="level-text"><span class="level-num">Level 1</span><span class="level-name">Ad Hoc or Absent Change Management</span></div></div>
+        <div class="level-detail open" id="detail-1"><p></p></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Print-only summary -->
+<div class="level-summary" id="level-summary">
+  <h3 id="summary-title"></h3>
+  <p id="summary-text"></p>
+</div>
+
+<!-- Screen footer bar -->
+<div class="screen-footer"></div>
+
+<!-- Print-only footer -->
+<div class="print-footer">
+  <span>www.prosci.com</span>
+  <span>For more info: solutions&#64;prosci.com</span>
+  <span id="assessment-date"></span>
+</div>
+
+<script>
+  document.getElementById('email-link').href = 'mailto:' + 'solutions' + '@' + 'prosci.com';
+
+  // Set assessment date for print footer
+  const today = new Date();
+  const dateStr = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  document.getElementById('assessment-date').textContent = 'Date of Assessment: ' + dateStr;
+
+  const levelSummaries = {
+    1: {
+      title: 'Level 1 — Ad Hoc or Absent Change Management',
+      text: 'At this level, project teams are not aware of change management and do not apply it as a formal approach. Change management is only used reactively, as a last resort when employee resistance jeopardizes project success. Communications are infrequent, executive support is limited to funding authorization, and people managers lack the information and skills to coach employees through change. Employees often learn about changes through rumors, leading to surprise, resistance, productivity loss, and increased turnover. To advance, the organization should invest in change management training, tools, and resources, and begin applying change management to isolated projects.'
+    },
+    2: {
+      title: 'Level 2 — Change Management on Isolated Projects',
+      text: 'At this level, elements of change management begin to emerge in isolated parts of the organization. The effort to manage the people side of change is infrequent and not centralized. There is a large variation in practices between projects, with some using change management effectively while others have none. Change management is typically applied in response to a negative event, and little interaction occurs between isolated project teams — each new project re-learns basic skills. To advance, the organization should create knowledge-sharing across initiatives, begin collecting tools and best practices, and build executive support for applying change management across multiple projects.'
+    },
+    3: {
+      title: 'Level 3 — Change Management on Multiple Projects',
+      text: 'At this level, multiple projects use structured change management processes, though approaches and methodologies may differ across teams. Knowledge sharing begins to emerge between groups, and senior leadership takes a more active role in sponsoring change. However, no organizational standards or requirements exist — pockets of excellence coexist with projects that use no change management. Training and tools become available to project leaders and people managers. To advance, the organization should enlist executive support for applying change management on every project and select a common methodology for enterprise-wide deployment.'
+    },
+    4: {
+      title: 'Level 4 — Organizational Change Management Standards',
+      text: 'At this level, the organization has selected a common approach and implemented standards for using change management on every new project. There is enterprise-wide acknowledgement of what change management is and why it matters. Executives, project teams, and people managers have access to formal training and tools. Dedicated positions support change management efforts. Executives assume sponsorship roles on every project, and change management is integrated from the planning phase. Adoption is not yet at 100%, and the organization is still building skills throughout. To advance, the organization should create a formal group responsible for effective deployment and address gaps where the methodology is not yet applied.'
+    },
+    5: {
+      title: 'Level 5 — Organizational Competency',
+      text: 'At this level, change management competency is part of the skill set of the organization. Effective change management is an explicitly stated strategic goal, and employees across the enterprise understand their role in making change successful. Change management is second nature — so commonplace that it is nearly inseparable from initiatives. People managers routinely use change management techniques across a broad range of efforts. The organization gathers data to enable continuous improvement of its methodology, tools, and training. Extensive training exists at all levels, resulting in higher ROI, lower productivity loss, and less employee resistance across the organization.'
+    }
+  };
+
+  // Populate detail panels
+  for (let i = 1; i <= 5; i++) {
+    document.querySelector('#detail-' + i + ' p').textContent = levelSummaries[i].text;
+  }
+
+  const values = {
+    leadership: 1, application: 1, competencies: 1, standardization: 1, socialization: 1
+  };
+
+  const sliders = document.querySelectorAll('.custom-slider');
+  const thumbRadius = 18;
+
+  function getSliderParts(slider) {
+    return {
+      fill: slider.querySelector('.cs-fill'),
+      thumb: slider.querySelector('.cs-thumb'),
+      valEl: slider.querySelector('.cs-val'),
+      ticks: slider.querySelectorAll('.cs-tick')
+    };
+  }
+
+  function renderSlider(slider) {
+    const dim = slider.dataset.dim;
+    const val = values[dim];
+    const { fill, thumb, valEl, ticks } = getSliderParts(slider);
+    const w = slider.offsetWidth;
+    const usable = w - thumbRadius * 2;
+    const pct = (val - 1) / 4;
+    const pos = thumbRadius + usable * pct;
+
+    thumb.style.left = pos + 'px';
+    fill.style.width = pos + 'px';
+    valEl.textContent = val.toFixed(1);
+    ticks.forEach((t, i) => { t.classList.toggle('filled', i + 1 <= val); });
+  }
+
+  function updateResults() {
+    const dims = Object.keys(values);
+    const total = dims.reduce((s, d) => s + values[d], 0);
+    const avg = total / dims.length;
+    const rounded = Math.round(avg * 10) / 10;
+    document.getElementById('avg-score').textContent = rounded.toFixed(1);
+
+    let level;
+    if (avg < 2) level = 1;
+    else if (avg < 3) level = 2;
+    else if (avg < 4) level = 3;
+    else if (avg < 4.8) level = 4;
+    else level = 5;
+
+    for (let i = 1; i <= 5; i++) {
+      document.getElementById('lv-' + i).classList.toggle('active', i === level);
+      document.getElementById('detail-' + i).classList.toggle('open', i === level);
+    }
+
+    const summary = levelSummaries[level];
+    document.getElementById('summary-title').textContent = summary.title;
+    document.getElementById('summary-text').textContent = summary.text;
+  }
+
+  function valFromX(slider, clientX) {
+    const rect = slider.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const usable = rect.width - thumbRadius * 2;
+    const raw = (x - thumbRadius) / usable;
+    const clamped = Math.max(0, Math.min(1, raw));
+    return Math.round((1 + clamped * 4) * 10) / 10;
+  }
+
+  sliders.forEach(slider => {
+    let dragging = false;
+    function startDrag(e) { dragging = true; handleMove(e); }
+    function handleMove(e) {
+      if (!dragging) return;
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      values[slider.dataset.dim] = valFromX(slider, clientX);
+      renderSlider(slider);
+      updatePrintSliders();
+      updateResults();
+    }
+    function stopDrag() { dragging = false; }
+
+    slider.addEventListener('mousedown', startDrag);
+    slider.addEventListener('touchstart', startDrag, { passive: true });
+    document.addEventListener('mousemove', handleMove);
+    document.addEventListener('touchmove', handleMove, { passive: true });
+    document.addEventListener('mouseup', stopDrag);
+    document.addEventListener('touchend', stopDrag);
+
+    slider.setAttribute('tabindex', '0');
+    slider.setAttribute('role', 'slider');
+    slider.setAttribute('aria-valuemin', '1');
+    slider.setAttribute('aria-valuemax', '5');
+    slider.setAttribute('aria-valuenow', '1');
+    slider.setAttribute('aria-label', slider.closest('.slider-block').querySelector('.slider-dim-title').textContent);
+
+    slider.addEventListener('keydown', (e) => {
+      const dim = slider.dataset.dim;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+        values[dim] = Math.min(5, Math.round((values[dim] + 0.1) * 10) / 10);
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+        values[dim] = Math.max(1, Math.round((values[dim] - 0.1) * 10) / 10);
+      } else return;
+      e.preventDefault();
+      slider.setAttribute('aria-valuenow', values[dim]);
+      renderSlider(slider);
+      updatePrintSliders();
+      updateResults();
+    });
+  });
+
+  function resetAll() {
+    Object.keys(values).forEach(d => { values[d] = 1; });
+    sliders.forEach(s => { s.setAttribute('aria-valuenow', '1'); renderSlider(s); });
+    updatePrintSliders();
+    updateResults();
+  }
+
+  function updatePrintSliders() {
+    document.querySelectorAll('.print-slider').forEach(ps => {
+      const dim = ps.dataset.dim;
+      const val = values[dim];
+      const pct = ((val - 1) / 4) * 100;
+      ps.querySelector('.ps-fill').style.right = 'calc(' + (100 - pct) + '% - 8px + ' + ((100 - pct) / 100 * 16) + 'px)';
+      const dot = ps.querySelector('.ps-dot');
+      dot.style.left = 'calc(8px + (100% - 16px) * ' + ((val - 1) / 4) + ' - 7px)';
+      dot.textContent = val.toFixed(1);
+    });
+  }
+
+  function renderAll() { sliders.forEach(s => renderSlider(s)); updatePrintSliders(); updateResults(); }
+  renderAll();
+  window.addEventListener('resize', renderAll);
+</script>
+</body>
+</html>
